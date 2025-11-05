@@ -12,6 +12,7 @@
 	Temperature Sensor (DHT11/DHT22/TMP36)
 
 # Circuit Diagram:
+<img width="817" height="388" alt="image" src="https://github.com/user-attachments/assets/d3e020ca-3de2-46dd-aeec-2fbd2e16b45c" />
 
 ---
 To upload
@@ -56,13 +57,143 @@ Step 7: Save Your Work
 
 
 # Program
+```
+//BY MAHESHKUMAR.W ,KLE TECH 
 
----
+#include <LiquidCrystal.h>
+
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+float temp;
+int tempPin = A1;
+int relayPin = 8;
+
+#define fan 9
+
+void setup(){
+	pinMode(fan, OUTPUT);
+    pinMode(relayPin, OUTPUT);
+  
+  	lcd.begin(16, 3);
+  
+  	lcd.setCursor(1, 1);
+  	lcd.print("Automated Temperature Control");
+  	delay(1000);
+  	lcd.clear();
+    lcd.setCursor(3,0);
+    lcd.print("Your name");
+    delay(1000);
+    lcd.clear();
+    lcd.print("Lets Get Started");
+    delay(2000);
+    lcd.clear();
+    lcd.print("AUTO TEMPERATURE");
+    delay(2000);
+    lcd.clear();
+  	
+}
+
+void loop()
+{
+	lcd.setCursor(3,0);
+  	lcd.print("Recording");
+  lcd.setCursor(2, 1);
+  lcd.print("Temperature..");
+  delay(3000);
+  lcd.clear();
+  lcd.setCursor(0,2);
+  temp = analogRead(tempPin);
+  //temp = temp*0.48828125;
+  float voltage = temp * 5.0;
+ 	voltage /= 1024.0; 
+ 
+ 	// print out the voltage
+ 	lcd.print(voltage); lcd.println(" volts");
+ 
+ 	// now print out the temperature
+ 	float temperatureC = (voltage - 0.5) * 100 ;  //converting from 10 mv per degree wit 500 mV offset
+ 	                                              //to degrees ((voltage - 500mV) times 100)
+ 	
+  lcd.setCursor(0, 0);
+  lcd.print("Temperature = ");
+  lcd.setCursor(2,1);
+  //lcd.print(temp);
+  lcd.print(temperatureC); lcd.println(" degrees C");
+  delay(3000);
+  lcd.clear();
+  
+  if(temperatureC >= 20)
+  {
+  	poweronRelay();
+    if(temperatureC >= 20 && temperatureC <= 25)
+    {
+      analogWrite(fan,51);
+      lcd.print("Fan Speed: 20% ");
+      delay(2000);
+      lcd.clear();
+    }
+    else if(temperatureC <= 35)
+    {
+      analogWrite(fan,102);
+      lcd.print("Fan Speed: 40% ");
+      delay(2000);
+      lcd.clear();
+    }
+    else if(temperatureC <= 40)
+    {
+      analogWrite(fan,153);
+      lcd.print("Fan Speed: 60% ");
+      delay(2000);
+      lcd.clear();
+    }
+    else if(temperatureC <= 44)
+    {
+      analogWrite(fan,200);
+      lcd.print("Fan Speed: 80% ");
+      delay(2000);
+      lcd.clear();
+    }
+    else if(temperatureC >= 45)
+    {
+      analogWrite(fan,255);
+      lcd.print("Fan Speed: 100% ");
+      delay(2000);
+      lcd.clear();
+    }
+  }
+  else if(temperatureC < 20)
+  {
+  	poweroffRelay();
+  }
+ 
+  
+}
+
+void poweronRelay()
+  {
+  	digitalWrite(relayPin, HIGH);
+    lcd.print("Fan ON");
+    delay(2000);
+    lcd.clear();
+  }
+
+void poweroffRelay()
+  {
+  	digitalWrite(relayPin, LOW);
+  	analogWrite(fan,0);
+    lcd.print("Fan OFF");
+    delay(2000);
+    lcd.clear();
+  }
+```
+
+
 To upload
---
+
+<img width="817" height="398" alt="image" src="https://github.com/user-attachments/assets/4cf2e3b9-df10-4cba-aed0-301055338f18" />
+
+<img width="818" height="407" alt="image" src="https://github.com/user-attachments/assets/27521786-a24a-4b02-959c-85eb3f38c7f7" />
+
 
 # Result
-
----
-To upload
---
+FAN SPEED CONTROLLER SYSTEM USING TEMPERATURE SENSOR USING TINKERCAD EXECUTED SUCCESSfully.
